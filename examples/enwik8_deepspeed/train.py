@@ -1,18 +1,21 @@
 import deepspeed
 
-from palm_pytorch import PaLM
-from palm_pytorch.autoregressive_wrapper import AutoregressiveWrapper
-
-import random
-import tqdm
+import argparse
 import gzip
+import random
+
 import numpy as np
 import torch
+import torch.nn.functional as F
 import torch.optim as optim
+import tqdm
+
 from einops import rearrange
 from torch import einsum, nn
-import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
+
+from palm_pytorch import PaLM
+from palm_pytorch.autoregressive_wrapper import AutoregressiveWrapper
 
 def add_argument():
     parser=argparse.ArgumentParser(description='enwik8')
@@ -87,7 +90,7 @@ model_engine, optimizer, trainloader, _ = deepspeed.initialize(args=cmd_args, mo
 
 # training
 
-for _ in range(EPOCHS):
+for e in range(EPOCHS):
     for i, data in enumerate(trainloader):
         model_engine.train()
         data = data.to(model_engine.local_rank)
@@ -95,7 +98,7 @@ for _ in range(EPOCHS):
         model_engine.backward(loss)
         torch.nn.utils.clip_grad_norm_(model_engine.parameters(), 0.5)
         model_engine.step()
-        print(loss.item() * GRADIENT_ACCUMULATE_EVERY)
+        print(f"Epoch {e}, iteration {i} loss: {loss.item() * GRADIENT_ACCUMULATE_EVERY}")
 
         if i % VALIDATE_EVERY == 0:
             model.eval()
