@@ -10,6 +10,17 @@ It obviously will not scale, but it is just for educational purposes. To elucida
 
 <a href="https://github.com/lucidrains/palm-jax">Jax version</a>
 
+## To Do list
+- [x] Make To Do list (we are now officially more organized than Character.AI devs)
+- [ ] Find datasets that PaLM could be trained on
+- [ ] Implement a pipeline for data to training
+- [ ] Experiment with [quantization](https://pytorch.org/docs/stable/quantization.html), to reduce required memory?
+- [ ] Experiment with improvements to the model:
+	- [ ] Try to see if [Mixture of Denoisers](https://arxiv.org/abs/2205.05131) can be added to the model/training process
+	- [ ] [Improved activation functions](https://arxiv.org/pdf/2111.04020.pdf)? Will these even work?
+- [ ] ???
+- [ ] Our wAIfus are real again!
+
 ## Install
 ```bash
 $ pip install PaLM-pytorch
